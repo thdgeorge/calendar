@@ -16,6 +16,6 @@
     "password": "aVMdukt7I9Sw",
     "database": "verceldb",
     "host": "ep-odd-shape-22736043-pooler.us-east-1.postgres.vercel-storage.com",
-    "dialect": "pgsql"
+    "dialect": "postgres"
   }
 }
