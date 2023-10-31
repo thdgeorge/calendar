@@ -1,0 +1,158 @@
+-- ---
+-- Globals
+-- ---
+
+-- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- ---
+-- Table 'users'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `users`;
+		
+CREATE TABLE `users` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) DEFAULT NULL,
+  `companyId` INT NOT NULL,
+  `departmentId` INT,
+  `lastname` VARCHAR(255) DEFAULT NULL,
+  `password` VARBINARY(255) DEFAULT NULL,
+  `email` VARCHAR(255) DEFAULT NULL,
+  `activated` TINYINT DEFAULT NULL COMMENT 'This flag means that user account was activated, e.g. logi',
+  `admin` TINYINT DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'company'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `company`;
+		
+CREATE TABLE `company` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `country` VARCHAR(255) NOT NULL,
+  `start_of_new_year` TINYINT NOT NULL,
+  `share_all_absences` TINYINT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'departments'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `departments`;
+		
+CREATE TABLE `departments` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `allowance` INT NOT NULL,
+  `include_public_holidays` TINYINT NOT NULL,
+  `bossId` INT,
+  `companyId` INT,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'public_holiday'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `public_holiday`;
+		
+CREATE TABLE `public_holiday` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `companyId` INT,
+  `name` VARCHAR(255) NOT NULL,
+  `date` DATE,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'leave_type'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `leave_type`;
+		
+CREATE TABLE `leave_type` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `companyId` INT,
+  `name` VARCHAR(255) NOT NULL,
+  `color` VARCHAR(255),
+  `use_allowance` TINYINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'leave'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `leave`;
+		
+CREATE TABLE `leave` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT,
+  `leave_type_id` INT,
+  `status` INT,
+  `approver_id` INT,
+  `employee_comment` VARCHAR(255),
+  `approver_comment` VARCHAR(255),
+  `created_at` DATETIME,
+  `decided_at` DATETIME,
+  `date_start` DATE,
+  `day_part_start` INT DEFAULT 1,
+  `date_end` DATE,
+  `day_part_end` INT DEFAULT 1,
+  PRIMARY KEY (`id`)
+);
+
+INSERT INTO `leave` (`date_start`, `date_end`) VALUES (CURDATE(), CURDATE());
+
+-- ---
+-- Foreign Keys 
+-- ---
+
+ALTER TABLE `users` ADD FOREIGN KEY (companyId) REFERENCES `company` (`id`);
+ALTER TABLE `users` ADD FOREIGN KEY (departmentId) REFERENCES `departments` (`id`);
+ALTER TABLE `departments` ADD FOREIGN KEY (bossId) REFERENCES `users` (`id`);
+ALTER TABLE `departments` ADD FOREIGN KEY (companyId) REFERENCES `company` (`id`);
+ALTER TABLE `public_holiday` ADD FOREIGN KEY (companyId) REFERENCES `company` (`id`);
+ALTER TABLE `leave_type` ADD FOREIGN KEY (companyId) REFERENCES `company` (`id`);
+ALTER TABLE `leave` ADD FOREIGN KEY (user_id) REFERENCES `users` (`id`);
+ALTER TABLE `leave` ADD FOREIGN KEY (leave_type_id) REFERENCES `leave_type` (`id`);
+ALTER TABLE `leave` ADD FOREIGN KEY (approver_id) REFERENCES `users` (`id`);
+
+-- ---
+-- Table Properties
+-- ---
+
+-- ALTER TABLE `users` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `company` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `departments` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `public_holiday` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `leave_type` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `leave` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ---
+-- Test Data
+-- ---
+
+-- INSERT INTO `users` (`id`,`name`,`companyId`,`departmentId`,`lastname`,`password`,`email`,`activated`,`admin`) VALUES
+-- ('','','','','','','','','');
+-- INSERT INTO `company` (`id`,`name`,`country`,`start_of_new_year`,`share_all_absences`) VALUES
+-- ('','','','','');
+-- INSERT INTO `departments` (`id`,`name`,`allowance`,`include_public_holidays`,`bossId`,`companyId`) VALUES
+-- ('','','','','','');
+-- INSERT INTO `public_holiday` (`id`,`companyId`,`name`,`date`) VALUES
+-- ('','','','');
+-- INSERT INTO `leave_type` (`id`,`companyId`,`name`,`color`,`use_allowance`) VALUES
+-- ('','','','','');
+-- INSERT INTO `leave` (`id`,`user_id`,`leave_type_id`,`status`,`approver_id`,`employee_comment`,`approver_comment`,`created_at`,`decided_at`,`date_start`,`day_part_start`,`date_end`,`day_part_end`) VALUES
+-- ('','','','','','','','','','','','','');
