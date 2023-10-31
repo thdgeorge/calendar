@@ -5,17 +5,17 @@
     "logging": false
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
+    "username": "urbsxmcqhnlua5bz",
+    "password": "c5QCWrsvBJPXByA9yr8J",
+    "database": "bqzqkryvrstg9jznkcmz",
+    "host": "bqzqkryvrstg9jznkcmz-mysql.services.clever-cloud.com",
     "dialect": "mysql"
   },
   "production": {
-    "username": "default",
-    "password": "aVMdukt7I9Sw",
-    "database": "verceldb",
-    "host": "ep-odd-shape-22736043-pooler.us-east-1.postgres.vercel-storage.com",
-    "dialect": "postgres"
+    "username": "urbsxmcqhnlua5bz",
+    "password": "c5QCWrsvBJPXByA9yr8J",
+    "database": "bqzqkryvrstg9jznkcmz",
+    "host": "bqzqkryvrstg9jznkcmz-mysql.services.clever-cloud.com",
+    "dialect": "mysql"
   }
 }
